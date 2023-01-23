@@ -1,6 +1,6 @@
 # Directory
 
-Here is the [HTML hand in link](https://rpubs.com/kimng/994479) for Lab 1. Please let me know if you can access it!
+Here is the [HTML hand in link](https://rpubs.com/kimng/NGUYEN_01_lab_toSubmitOnCanvas) for Lab 1. Please let me know if you can access it!
 
 | **Folder/File Name** | **Purpose** |
 |:--|:--|

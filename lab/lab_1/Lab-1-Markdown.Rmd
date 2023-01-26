@@ -98,7 +98,7 @@ Here is the [link](http://insideairbnb.com/get-the-data/) to the AirBNB dataset.
 
 I will be working from the Lab directory from my local machine.
 
-```{r warnings = FALSE, message = FALSE, echo = FALSE}
+```{r warnings = FALSE, message = FALSE,  }
 library("R.utils")
 
 # gunzip("../data/listings.csv.gz")
@@ -108,7 +108,7 @@ airbnb <- read.csv("../../data/lab_1/listings.csv")
 
 ## 3.2. Use View(), head() or tail() to check your data. What variables does it contain? How many rows are in your data? What is the unit of analysis in your data?
 
-```{r echo = FALSE}
+```{r  }
 library(knitr)
 kable(airbnb[1, ], caption = "First Row of AirBNB dataset")
 ```
@@ -135,7 +135,7 @@ library(tidyverse)
 
 *For how many units does the host live in a different neighborhood from the listing? For how many units does the host live in the same neighborhood as the listing?*
 
-```{r message = FALSE, warning= FALSE, echo = FALSE}
+```{r message = FALSE, warning= FALSE,  }
 
 # use columns "neighborhood" and "host_neighborhood"
 # using dplyr
@@ -159,7 +159,7 @@ Despite the thousands of listings in the greater Seattle area, `r nrow(filter(pl
 
 *Building on that work, what is the average number of listings for hosts that live in the same neighborhood as their listing? What's the average for hosts who live in different neighborhoods from their listing?*
 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE,  }
 
 # This variable will contain the TRUE results of hosts who live in AT LEAST ONE of their listings
 total_true_listing <- place_host %>%
@@ -201,7 +201,7 @@ Set up your environment by:
 
 Reading the Airbnb data: There's another new data set in the `data/` folder. This one has almost 10,000 cases and the census data by zipcode. These data are from New York City, not Seattle!
 
-```{r echo = FALSE}
+```{r  }
 nyc <- read.csv("../../data/lab_1/nyc_airbnb_census_data.csv")
 ```
 
@@ -226,7 +226,7 @@ parse_number(nyc$price)
 
 For this scatter plot, we will be comparing the fluctuation of unit prices with the proportions of the White population.
 
-```{r echo = FALSE, warning=FALSE}
+```{r  , warning=FALSE}
 library(ggplot2)
 
 # select pricing and prop_white columns
@@ -252,7 +252,7 @@ print(nyc_scatter)
 
 Use the `modal_race` variable to plot a boxplot comparing race and price. You may have to look up how to make a boxplot in `ggplot2`---what geom do you need?
 
-```{r echo = FALSE, warning = FALSE}
+```{r  , warning = FALSE}
 nyc_full <- read.csv("../../data/lab_1/nyc_airbnb_census_data.csv")
 
 # select relevant variables
@@ -281,7 +281,7 @@ print(nyc_boxplot)
 
 As seen from the chart above, it's a bit hard to see the actual *box* of the box plot, so I limited the y axis range to `300` for better clarity.
 
-```{r echo = FALSE, warning = FALSE, message = FALSE}
+```{r  , warning = FALSE, message = FALSE}
 print(nyc_boxplot + ylim(0,300))
 ```
 
@@ -313,7 +313,7 @@ I am going to have to mutate a new column to count the total number of AirBNBs i
 
 As you can see, I selected only two columns (`city` and `total_pop`), cleaned it so that it would remove any row without all of the information so that it wouldn't produce any false results, then counted the number of AirBNBs that resided in that city.
 
-```{r message = FALSE, echo = FALSE}
+```{r message = FALSE,  }
 # Select the columns you need to work with 
 total_airbnb <- nyc_full %>%
   select(city, total_pop)
@@ -360,7 +360,7 @@ Note these are **separate data frames**, each needing to be loaded separately us
 a.  Install and load the `nycflights13` package. Load the `tidyverse` package.
 b.  Load data sets `flights`, `planes`, `airlines`
 
-```{r echo = FALSE}
+```{r  }
 library(nycflights13)
 (head(flights))
 head(planes)
@@ -381,7 +381,7 @@ The common column between both data frames is `tailnum`.
 
 ## 8.4. Join the two data frames
 
-```{r echo = FALSE}
+```{r  }
 # Select specific columns in Flights data set so it's easier to see
 flights2 <- flights %>%
   select(tailnum, origin, dest)
@@ -402,7 +402,7 @@ head(sea_manu)
 
 *For flights with a destination of Seattle, who are the largest manufacturers? Give top five of the manufacturers.* (Check hints if you have troubles)
 
-```{r echo = FALSE}
+```{r  }
 # Filter data frame to only show dest = SEA
 sea_manu <- sea_manu %>%
   filter(dest == "SEA")
@@ -428,7 +428,7 @@ The data frames I will be joining is `flights` and `airlines`, with the column `
 
 *Join the two data frames in 8.6 and list the top five airlines.*
 
-```{r echo = FALSE}
+```{r  }
 library(dplyr)
 # select only the columns that I will be using for easier visibility
 flights3 <- flights %>%

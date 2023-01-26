@@ -18,8 +18,9 @@ if (!require("pacman")) install.packages("pacman")
 pacman::p_load(jsonlite, ggmap,ggplot2, lubridate, zoo,here,tidyverse,kableExtra,ggmap)
 ```
 
-```{r echo = FALSE}
+```{r echo = FALSE, warning = FALSE}
 library(jsonlite)
+library(here)
 ```
 
 # Data
@@ -176,6 +177,12 @@ spain_zoom2<-get_googlemap(center = c(lon = -3.703790, lat = 40.416775)
               , scale = 2
               , color = "bw") 
 
+spain_zoom3<-get_googlemap(center = c(lon = -3.703790, lat = 40.416775)
+              , zoom = 11
+              , maptype="roadmap"
+              , scale = 2
+              , color = "bw") 
+
 ```
 
 ```{r}
@@ -225,7 +232,7 @@ spain_zoom2%>%ggmap()+geom_point(data = locations, aes(x = lon, y = lat), alpha 
 
 ```{r warning = FALSE}
 ## Loads spain_zoom3
-load(here("data","maps.Rda"))
+load(here("data","maps2.Rda"))
 
 ## Plot a closer zoom of Madrid here
 ### See code above for how to do this
@@ -250,97 +257,4 @@ I explored Goya
 
 -   Write up hypotheses on what the person likes to do in Madrid.
 
-After doing brief research on Madrid, a person who is visiting would probably like to visit the art museums.
-
-# Extra Credit: Spotify!
-
-## Necessary Packages
-
-```{r,message=FALSE,warning=FALSE}
-## Run this code, to manage packages and install as needed.
-# Install pacman
-if (!require("pacman")) install.packages("pacman")
-# p_load function loads packages if installed, or install then loads otherwise
-pacman::p_load(jsonlite, ggmap,ggplot2, lubridate, zoo,here,tidyverse,kableExtra,ggmap,spotifyr,ggjoy)
-```
-
-## Spotify API Access
-
--   See this tutorial for how to acces the API - [spotify R API](https://www.rcharlie.com/spotifyr/).
-    -   Go to <https://developer.spotify.com/dashboard/>
-    -   Log In and accept terms and conditions
-    -   Create a new app and follow directions on [spotify R API](https://www.rcharlie.com/spotifyr/)
-
-```{r,eval=FALSE}
-Sys.setenv(SPOTIFY_CLIENT_ID = 'YOURKEY')
-Sys.setenv(SPOTIFY_CLIENT_SECRET = 'YOURKEY')
-access_token <- get_spotify_access_token()
-```
-
-```{r,eval=FALSE}
-########
-## If you run the above code and this code
-## You wont save your id in Markdown
-########
-grp<-get_my_recently_played(limit = 5) 
-gta_st<-get_my_top_artists_or_tracks(type = 'artists', time_range = 'short_term', limit = 5)
-gta_lt<-get_my_top_artists_or_tracks(type = 'artists', time_range = 'long_term', limit = 5)
-gta_st_tracks<-get_my_top_artists_or_tracks(type = 'tracks', time_range = 'short_term', limit = 5)
-gta_lt_tracks<-get_my_top_artists_or_tracks(type = 'tracks', time_range = 'long_term', limit = 5)
-
-ed <- spotifyr::get_artist_audio_features('ed sheeran')
-
-save(grp,gta_st,gta_lt,gta_st_tracks,gta_lt_tracks, ed,file="data/spotify.Rda")
-```
-
-```{r}
-################
-## Code Examples
-################
-## Load example data
-load(here("data","spotify.Rda"))
-
-
-grp%>% 
-  mutate(artist.name = map_chr(track.artists, function(x) x$name[1]),
-         played_at = as_datetime(played_at)) %>% 
-  select(track.name, artist.name, track.album.name, played_at) %>% 
-  kable()
-
-grp %>% 
-  mutate(artist.name = map_chr(track.artists, function(x) x$name[1]),
-         played_at = as_datetime(played_at)) %>% 
-  select(track.name, artist.name, track.album.name, played_at) %>% 
-  kable()
-
-gta_st %>% 
-  mutate(artist.name = map_chr(artists, function(x) x$name[1])) %>% 
-  select(name, artist.name, album.name) %>% 
-  kable()
-
-gta_lt%>% 
-  select(name, genres) %>% 
-  rowwise %>% 
-  mutate(genres = paste(genres, collapse = ', ')) %>% 
-  ungroup %>% 
-  kable()
-
-
-gta_st_tracks %>% 
-  mutate(artist.name = map_chr(artists, function(x) x$name[1])) %>% 
-  select(name, artist.name, album.name) %>% 
-  kable()
-
-ed %>%arrange(-valence) %>% 
-  select(track_name, valence) %>% 
-  distinct() %>%
-  head(5) %>% 
-  kable()
-
-library(ggjoy)
-
-ggplot(ed, aes(x = valence, y = album_name)) + 
-  geom_joy() + 
-  theme_joy() +
-  ggtitle("Joyplot of Ed's joy distributions", subtitle = "Based on valence pulled from Spotify's Web API with spotifyr")
-```
+After doing brief research on Madrid, a person who is visiting would probably like to visit the art museums and eat hot foods.

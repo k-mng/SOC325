@@ -1,5 +1,7 @@
 # Directory
 
+Final HTML [link](https://rpubs.com/kimng/NGUYEN_03_lab_toSubmitOnCanvas) to submit
+
 | **Folder/File Name** | **Purpose** |
 |:--|:--|
 | [lab-3-markdown-cache](./lab-3-markdown-cache) | I'm not exactly sure what's in here, but it was downloaded from the professor's GitHub |

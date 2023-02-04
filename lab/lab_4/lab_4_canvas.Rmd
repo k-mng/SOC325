@@ -319,6 +319,8 @@ ct_long%>%
 
 ## Assignment
 
+# Part 1
+
 ## Question 1.1
 
 Link the demographics (`demographics`) and chrono type (`chrono_type`) data sets. *hint* use `left_join`.
@@ -365,6 +367,9 @@ bar_chart_gender
 <span style="color: red;">END OF YOUR SOLUTION HERE</span>
 
 
+
+# Part 2
+
 ## Question 2.1
 
 Link the `daily_sleep_log` with your demography and chrono type linked data. *hint* use `left_join` again.
@@ -399,11 +404,12 @@ summarize2 <- data2 %>%
 
 summarize3 <- sea_met_sleep %>%
   summarise(average = mean(BLS_PCARE_SLEEP))
+
 ```
 
 Compare the Sleep time of Seattle Metro from the ATUS to our Class Average. Does it look like our class is sleeping a similar amount of time?
 
-Our class average sleep time is `r summarize2$average` minutes, or `r (summarize2$average)/60` hours. The average sleep time for all of Seattle Metro is `r summarize3$average` minutes, or `r (summarize3$average)/60` hours. 
+Our class average sleep time is `r round(summarize2$average, 2)` minutes, or `r round((summarize2$average)/60, 2)` hours. The average sleep time for all of Seattle Metro is `r round(summarize3$average, 2)` minutes, or `r round((summarize3$average)/60, 2)` hours. 
 
 <span style="color: red;">END OF YOUR SOLUTION HERE</span>
 
@@ -414,13 +420,37 @@ Plot average time slept by day and gender.
 
 <span style="color: red;">YOUR SOLUTION HERE</span>
 
-```{r}
-## Your code here
+```{r warning = FALSE, message = FALSE}
+# Make the chart
+data3 <- left_join(daily_sleep_log, data1)
+
+# Select relevant columns and rename columns
+data3 <- data3 %>%
+  select(sleep_date, gender, time_slept_hour) %>%
+  rename(date = sleep_date, hours_slept = time_slept_hour) %>%
+# Group by date and gender
+  group_by(date, gender) %>%
+# Summarize the average time slept for each gender category
+  summarise(average_slept = mean(hours_slept))
+
+data3
 ```
 
+```{r}
+# Make a grouped bar chart
+library(ggplot2)
+
+ggplot(data = data3,
+       aes(x = date,
+           y = average_slept,
+           fill = gender)) + geom_bar(
+             stat = "identity", 
+             position = "dodge") + ylab("Average Hours Slept")
+```
 <span style="color: red;">END OF YOUR SOLUTION HERE</span>
 
-## Question 3
+
+# Question 3
 
 Come up with a plot not thought of in this lab to illustrate a feature of the data you find interesting. 
 
@@ -431,8 +461,37 @@ Come up with a plot not thought of in this lab to illustrate a feature of the da
 
 <span style="color: red;">YOUR SOLUTION HERE</span>
 
+*Question*: What are the average hours slept for people who are working vs. people who aren't?
+
+```{r message = FALSE}
+# Make dataset
+
+data4 <- left_join(daily_sleep_log, data1)
+
+# Select relevant columns
+data4 <- data4 %>%
+  select(sleep_date, working, time_slept_hour) %>%
+# Rename column for easier typing 
+  rename(date = sleep_date, hours_slept = time_slept_hour) %>% 
+# Group by date and working status 
+  group_by(date, working) %>%
+# Summarize average time slept
+  summarise(mean(hours_slept)) %>%
+# Rename column for easier typing
+  rename(average = "mean(hours_slept)")
+
+data4
+```
+
 ```{r}
-## Your code here
+# Plot the data
+
+ggplot(data = data4,
+       aes(x = date,
+           y = average,
+           fill = working)) + geom_bar(
+             stat = "identity", 
+             position = "dodge") + ylab("Average Hours Slept")
 ```
 
 <span style="color: red;">END OF YOUR SOLUTION HERE</span>

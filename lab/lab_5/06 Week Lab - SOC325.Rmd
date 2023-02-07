@@ -1,7 +1,7 @@
 ---
 title: "SOC 325 Lab 5 - Analyzing Watch Data"
 subtitle: "Soc 325: Quantified-Self"
-author: "[PUT YOUR NAME HERE]"
+author: "Kim Nguyen"
 date: "`r Sys.Date()`"
 output: 
   html_document:
@@ -66,7 +66,7 @@ We will look at daily and weekend/weekday variation:
 ## Violin Plots
 
 ```{r,message=FALSE,warning=FALSE}
-df <- read.csv (here("data","IndividualSleepSummary.csv"))
+df <- read.csv(here("data/lab_5/fitbit_data","IndividualSleepSummary.csv"))
 
 #Set year and subject id as factors
 df$year <- as.factor (df$year)
@@ -112,12 +112,12 @@ ggplot(df, aes(x = year, y = onset_mean)) + #Change y axis to whatever plotting 
 ## Waveform Plots
 
 ```{r,message=FALSE,warning=FALSE}
-filenames <- list.files(path=here("data"),pattern = "\\.csv$") #Get .csv file names in directory
+filenames <- list.files(path=here("data/lab_5"),pattern = "\\.csv$") #Get .csv file names in directory
 filenames<-filenames[-1]
 
 
 #Combine data frame with all .csv files data
-df<- lapply(here("data/",filenames), fread) %>% 
+df<- lapply(here("data/lab_5",filenames), fread) %>% 
   set_names(filenames) %>% 
   rbindlist(idcol = "subjectid") #set column with identifier (subject id)
 
@@ -247,13 +247,13 @@ For this lab we are going to analyze sleep data from a Fitbit tracker from Kaggl
 
 We can load this data directly,
 
-```{r}
-November_sleep<- read_csv(here("fitbit_data","November Sleep Data - Sheet1.csv"))%>%na.omit()
-December_sleep<- read_csv(here("fitbit_data","December Sleep data - Sheet1.csv"))%>%na.omit()
-January_sleep<- read_csv(here("fitbit_data","January sleep data - Sheet1.csv"))%>%na.omit()
-February_sleep<- read_csv(here("fitbit_data","February sleep data - Sheet1 (1).csv"))%>%na.omit()
-March_sleep<- read_csv(here("fitbit_data","March sleep data - Sheet1.csv"))%>%na.omit()
-April_sleep<- read_csv(here("fitbit_data","April sleep data - Sheet1.csv"))%>%na.omit()
+```{r warning = FALSE, message = FALSE}
+November_sleep<- read_csv(here("data/lab_5/fitbit_data","November Sleep Data - Sheet1.csv"))%>%na.omit()
+December_sleep<- read_csv(here("data/lab_5/fitbit_data","December Sleep data - Sheet1.csv"))%>%na.omit()
+January_sleep<- read_csv(here("data/lab_5/fitbit_data","January sleep data - Sheet1.csv"))%>%na.omit()
+February_sleep<- read_csv(here("data/lab_5/fitbit_data","February sleep data - Sheet1 (1).csv"))%>%na.omit()
+March_sleep<- read_csv(here("data/lab_5/fitbit_data","March sleep data - Sheet1.csv"))%>%na.omit()
+April_sleep<- read_csv(here("data/lab_5/fitbit_data","April sleep data - Sheet1.csv"))%>%na.omit()
 
 ```
 
@@ -376,7 +376,21 @@ dec_jan<-December_sleep%>%bind_rows(January_sleep)
 <span style="color: red;">YOUR SOLUTION HERE</span>
 
 ```{r}
-## Your code here
+## Rename DECEMBER/JANUARY Column
+December_sleep<-December_sleep%>%rename(DayOfTheWeek=DECEMBER)
+## Add Flag for month
+December_sleep<-December_sleep%>%mutate(
+  Month="December"
+)
+
+## Do same for January
+January_sleep<-January_sleep%>%rename(DayOfTheWeek=JANUARY)
+January_sleep<-January_sleep%>%mutate(
+  Month="January"
+)
+
+## Combine
+dec_jan<-December_sleep%>%bind_rows(January_sleep)
 ```
 
 <span style="color: red;">END OF YOUR SOLUTION HERE</span>
@@ -388,7 +402,14 @@ Repeat the cleaning steps used in NOVEMBER, but adapt them for your `dec_jan` ob
 <span style="color: red;">YOUR SOLUTION HERE</span>
 
 ```{r}
-## Your code here
+November_sleep <- November_sleep %>%
+  rename(DayOfTheWeek = NOVEMBER)
+
+November_sleep <- November_sleep %>%
+  mutate(Month = "November")
+
+ndj <- dec_jan %>%
+  bind_rows(November_sleep)
 ```
 
 <span style="color: red;">END OF YOUR SOLUTION HERE</span>
@@ -400,7 +421,9 @@ Print out out the `dec_jan` object using the `kbl()` function.
 <span style="color: red;">YOUR SOLUTION HERE</span>
 
 ```{r}
-## Your code here
+dec_jan%>%kbl(digits = 2) %>%
+  kable_styling()%>%
+   kable_paper("hover", full_width = F)
 ```
 
 <span style="color: red;">END OF YOUR SOLUTION HERE</span>

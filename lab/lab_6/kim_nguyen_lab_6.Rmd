@@ -33,6 +33,7 @@ To collect Internet data, we'll use two new packages. `rvest` is for web scrapin
 
 *Run this in the console first, before pacman!!*
 
+
 ```
 devtools::install_version("RedditExtractoR", version = "2.1.5", repos = "http://cran.us.r-project.org")
 ```

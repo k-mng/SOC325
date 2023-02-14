@@ -1,7 +1,7 @@
 ---
 title: "SOC 325 Lab 6 - Collecting Internet Data & Topic Modelling"
 subtitle: "Soc 325: Quantified-Self"
-author: "[PUT YOUR NAME HERE]"
+author: "Kim Nguyen"
 date: "`r Sys.Date()`"
 output: 
   html_document:
@@ -31,7 +31,7 @@ Web APIs are structured ways of making web requests. This is how websites commun
 
 To collect Internet data, we'll use two new packages. `rvest` is for web scraping, and `RedditExtractoR` is for using Reddit API and `stm` for topic modeling. We will also load our famous package `tidyverse` for easier data handling. 
 
-*Run this in the console first, befor pacman!!*
+*Run this in the console first, before pacman!!*
 
 ```
 devtools::install_version("RedditExtractoR", version = "2.1.5", repos = "http://cran.us.r-project.org")

@@ -26,3 +26,10 @@ pie_time <- popular_time %>%
   coord_polar("y", start = 0)
 
 pie_time
+
+# testing
+column_time <- popular_time %>%
+  ggplot(aes(x = hr,
+             y = average)) + geom_col()
+
+column_time

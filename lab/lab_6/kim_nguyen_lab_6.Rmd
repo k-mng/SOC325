@@ -200,51 +200,53 @@ Finds another subreddit (i.e. besides `QuantifiedSelf`) and redo the above analy
 
 [YOUR SOLUTION HERE]{style="color: red;"}
 
-```{r}
-# download the Fitness subreddit
-fit_df = get_reddit(subreddit = "Fitness", page_threshold = 10)
+```{r message = FALSE}
+# download subreddit of choosing
+fam_df = get_reddit(subreddit = "TheIchinoseFamily", page_threshold = 10)
 
-glimpse(fit_df)
+glimpse(fam_df)
 ```
 
 ```{r}
 # Look at the top 20 authors
-fit_top_authors = 
-  fit_df %>% 
+fam_top_authors = 
+  fam_df %>% 
   distinct(author, .keep_all = TRUE) %>% 
   mutate(author = fct_reorder(author, num_comments)) %>%
   arrange(desc(num_comments)) %>% 
   head(20) 
 
-fit_top_authors %>%
+fam_top_authors %>%
   ggplot(aes(x=num_comments, y=author)) + 
   geom_col() + ggtitle("The Total Number of Comments Made by Each Author") + xlab("# of Comments") + ylab("Username")
 ```
 
 ```{r warning = FALSE, message = FALSE}
 # Text Processing the comments
-fit_processed <- textProcessor(documents = fit_df$comment,  stem = FALSE)
+fam_processed <- textProcessor(documents = fam_df$comment,  stem = FALSE)
 
-fit_out <- prepDocuments(documents = fit_processed$documents, vocab = fit_processed$vocab)
+fam_out <- prepDocuments(documents = fam_processed$documents, vocab = fam_processed$vocab)
 ```
 ```{r cache = TRUE}
 # Testing out STM functions
-fit_stm5 <-  stm(documents = fit_out$documents, vocab = fit_out$vocab, K = 5, verbose = FALSE)
+fam_stm5 <-  stm(documents = fam_out$documents, vocab = fam_out$vocab, K = 5, verbose = FALSE)
 ```
 
-```{r, eval= FALSE, warning = FALSE}
+```{r warning = FALSE}
 # I couldn't run the 10, so I'm leaving it here to prove that I know what the code is
-# fit_stm10 <- stm(documents = fit_out$documents, vocab = fit_out$vocab, K = 10, verbose = FALSE)
+fam_stm10 <- stm(documents = fam_out$documents, vocab = fam_out$vocab, K = 10, verbose = FALSE)
 ```
 
 ```{r}
 # Summarizing the STM functions
 par(mfrow=c(1,2))
-plot(fit_stm5, n=7, text.cex = 0.7)
+plot(fam_stm5, n=7, text.cex = 0.7)
+
+plot(fam_stm10, n=7, text.cex = 0.7)
 ```
 
 ```{r}
 # making the word cloud
-cloud(fit_stm5, topic = 5)
+cloud(fam_stm10, topic = 2)
 ```
 [END OF YOUR SOLUTION HERE]{style="color: red;"}

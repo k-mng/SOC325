@@ -36,6 +36,63 @@ cas_day <- day %>%
   select(dteday, holiday, weekday, casual) %>%
   mutate(weekday = str_replace_all(weekday, "[12345]", "weekday")) %>%
   mutate(weekday = str_replace_all(weekday, "[06]", "weekend")) %>%
-  mutate(weekday = ifelse(holiday == 1, "holiday", weekday))
+  group_by(weekday) %>%
+  summarize(casual = sum(casual))
 
 # make a pie chart
+ggplot(cas_day,
+       aes(x = "",
+           y = casual,
+           fill = weekday)) + geom_bar(stat = "identity",
+                                       width = 1) + coord_polar("y", 
+                                                                start = 0) + theme_void() + geom_label(aes(label = casual),
+                                                                                                       position = position_stack(vjust = 0.5)) +
+  scale_fill_brewer() + ggtitle("# Casual Bikers Weekdays vs. Weekends")
+
+###
+# first one is too inconclusive so lets break it down by day
+cas2_day <- day %>%
+  select(dteday, holiday, weekday, casual) %>%
+  mutate(weekday = str_replace_all(weekday, c("0" = "Sunday",
+                                              "1" = "Monday",
+                                              "2" = "Tuesday",
+                                              "3" = "Wednesday",
+                                              "4" = "Thursday",
+                                              "5" = "Friday",
+                                              "6" = "Saturday"))) %>%
+  group_by(weekday) %>%
+  summarize(casual = sum(casual))
+
+# make the pie chart
+ggplot(cas2_day,
+       aes(x = "",
+           y = casual,
+           fill = weekday)) + geom_bar(stat = "identity",
+                                       width = 1) + coord_polar("y", 
+                                                                start = 0) + theme_void() + geom_label(aes(label = casual),
+                                                                                                       position = position_stack(vjust = 0.5)) +
+  scale_fill_manual(values = c("#b8d8ba", "#d9dbbc",
+                               "#fcddbc", "#ef959d",
+                               "#d1aca5", "#69585f",
+                               "#82ac85")) + ggtitle("# Casual Bikers on Each Day of the Week")
+
+#-------------------------------------------------------------------------------
+# In what weather do people tend to bike in?
+weather <- day %>%
+  select(weathersit, cnt) 
+
+weather$weathersit <- as.factor(weather$weathersit)
+
+# make a boxplot
+ggplot(weather,
+       aes(x = weathersit,
+           y = cnt)) + geom_boxplot() +
+  ggtitle("Frequency of Bikers During Various Weather Situations") +
+  xlab("Weather Situation") +
+  ylab("# of Bikers") +
+  scale_x_discrete(breaks = c("1", "2", "3"),
+                   labels = c("Clear/Few Clouds", 
+                              "Misty/Cloudy",
+                              "Light Snow/Rain, 
+                              Scattered Clouds, 
+                              Thunderstorm"))
